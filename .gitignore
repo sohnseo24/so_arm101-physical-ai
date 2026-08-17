@@ -1,0 +1,14 @@
+# Python / PyTorch Cache
+__pycache__/
+*.py[cod]
+
+# Checkpoints & Weights (용량이 커서 깃허브 업로드 방지)
+*.safetensors
+*.pt
+*.bin
+outputs/
+logs/
+
+# System Files
+.DS_Store
+*.log
