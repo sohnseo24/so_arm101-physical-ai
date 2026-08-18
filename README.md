@@ -14,20 +14,47 @@ Hugging Face의 **LeRobot** 프레임워크와 **SO-ARM101** 로봇팔을 활용
 
 ## 파이프라인 및 스크립트 실행 안내
 
-모든 실행 스크립트는 `scripts/` 폴더 내에 정의되어 있습니다.
+모든 실행 스크립트는 `scripts/` 폴더 내에 정의되어 있으며, 아래 순서대로 실행을 권장합니다.
 
 ```bash
-# 1. 로봇팔 보정 (Calibration)
+# 0. 개발 환경 세팅 (Conda, LeRobot 및 의존성 패키지)
+bash scripts/00_setup_env.sh
+
+# 1. 포트 권한 설정 및 로봇팔 보정 (Calibration)
 bash scripts/01_calibrate.sh
 
-# 2. 데이터 수집 (Data Collection)
+# 2. 카메라 시야각 점검 및 원격 조종 (Teleoperation)
+bash scripts/02_teleop.sh
+
+# 3. 고품질 시연 데이터 수집 (Data Collection)
 bash scripts/03_record_dataset.sh
 
-# 3. ACT 및 VLA 모델 추론 (Inference)
-bash scripts/05_inference_eval.sh
-```
+# 4. 수집 데이터 재생 및 시각화 검증
+bash scripts/04_replay_viz.sh
+
+# 5. ACT AI 모델 직접 학습 (Model Training)
+bash scripts/05_train_act.sh
+
+# 6. CPU 병목 방지 최적화 적용 실시간 로봇 구동 (Rollout)
+bash scripts/06_rollout_eval.sh
 
 ---
+
+## 폴더 구조
+
+so_arm101-physical-ai/
+├── scripts/
+│   ├── 00_setup_env.sh       # 환경 구축 스크립트 (Miniforge, Conda, pip)
+│   ├── 01_calibrate.sh       # 로봇 보정 스크립트
+│   ├── 02_teleop.sh          # 원격 조종 스크립트
+│   ├── 03_record_dataset.sh  # 데이터 수집 스크립트 (단축키 팁 포함)
+│   ├── 04_replay_viz.sh      # 데이터 재현 및 시각화 스크립트
+│   ├── 05_train_act.sh       # ACT 모델 학습 스크립트 (lerobot-train)
+│   └── 06_rollout_eval.sh    # 모델 롤아웃 & CPU 스레드 최적화 스크립트
+├── docs/
+│   └── troubleshooting.md    # 데이터 수집 및 학습 오류 분석 노트
+├── .gitignore
+└── README.md                 # 파이프라인 및 데이터 수집 단축키 안내 업데이트
 # 🛠 SO-ARM101 & ACT Model Troubleshooting Log
 
 ## Issue 1: 데이터 수량 증대(50개 -> 150개) 시 모델 성능 저하 현상
