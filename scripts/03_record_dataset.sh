@@ -1,28 +1,32 @@
 #!/bin/bash
 # ------------------------------------------------------------------------------
-# 3. 데이터 수집 (Data Collection)
+# 3. 데이터 수집
 # 단축키: [n] 다음 에피소드 / [r] 재녹화 / [q or Esc] 종료
 # ------------------------------------------------------------------------------
 
 sudo chmod 666 /dev/ttyACM* /dev/video*
 
+#캘리브레이션 경로 명시
+--robot.calibration_dir=sscc-soarm/robots/so_follower/ \
+--teleop.calibration_dir=sscc-soarm/teleoperators/so_leader \
+
 lerobot-record \
   --robot.type=so101_follower \
   --robot.port=/dev/ttyACM1 \
   --robot.id=so101_follower_arm \
-  --robot.cameras="{ front: {type: opencv, index_or_path: 32, width: 640, height: 480, fps: 30}, rear: {type: opencv, index_or_path: 34, width: 640, height: 480, fps: 30}}" \
+  --robot.cameras="{ gripper: {type: opencv, index_or_path: 32, width: 640, height: 480, fps: 30}, top: {type: opencv, index_or_path: 34, width: 640, height: 480, fps: 30}}" \
   --teleop.type=so101_leader \
   --teleop.port=/dev/ttyACM0 \
   --teleop.id=so101_leader_arm \
   --display_data=true \
-  --dataset.root=data2 \
-  --dataset.repo_id=bae/candy_data_1 \
+  --dataset.root=data_bae/single_yellow\
+  --dataset.repo_id=bae/bae/candy_data_bae \
   --dataset.num_episodes=50 \
   --dataset.episode_time_s=15 \
   --dataset.reset_time_s=5 \
   --dataset.single_task="Pick the yellow candy" \
   --dataset.push_to_hub=false \
-  --resume=false
+  --resume=true #이어서 녹화할 수 있도록 true로 
 
 # 주요 변경 사항
 # 기존코드: 10회 분량의 단순 테스트용 데이터 수집 스크립트
