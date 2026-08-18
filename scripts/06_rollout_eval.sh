@@ -15,7 +15,7 @@ conda activate lerobot 2>/dev/null || true
 cd ~/Desktop/sscc/lerobot
 
 # ------------------------------------------------------------------------------
-# [옵션 A] ACT 모델 기반 자율 동작 (Rollout)
+# [옵션 A] ACT 모델 기반 자율 동작 (동기식(Sync) Rollout)
 # ------------------------------------------------------------------------------
 lerobot-rollout \
   --strategy.type=base \
@@ -27,12 +27,16 @@ lerobot-rollout \
   --duration=0 \
   --display_data=true
 
+
+
 # ------------------------------------------------------------------------------
-# [옵션 B] SmolVLA (Vision-Language-Action) 모델 기반 자율 동작 (필요 시 주석 해제)
+# [옵션 B] SmolVLA VLM 모델 비동기(RTC) Rollout (필요 시 주석 해제)
 # ------------------------------------------------------------------------------
 # lerobot-rollout \
 #   --strategy.type=base \
 #   --policy.path=outputs/train/bae/smolvla_all/checkpoints/last/pretrained_model \
+#   --inference.type=rtc \
+#   --inference.rtc.execution_horizon=10 \
 #   --robot.type=so101_follower \
 #   --robot.port=/dev/ttyACM0 \
 #   --robot.id=so101_follower_arm \
@@ -41,14 +45,16 @@ lerobot-rollout \
 #   --duration=0 \
 #   --display_data=true
 
-
-#변경사항
-
-
-#--strategy.type=base 옵션 추가
-
-#체크포인트 불러오기 경로 최신화 (checkpoints/last/pretrained_model)
-
-#카메라 키 이름 및 무한 실행(duration=0) 설정 반영
-
-#SmolVLA 자연어 지시어 기반 롤아웃 명령어 주석 추가
+# ------------------------------------------------------------------------------
+# [옵션 C] DAgger (Human-in-the-Loop) - 로봇 동작 중 사람이 리더암으로 교정 수집
+# ------------------------------------------------------------------------------
+# lerobot-rollout \
+#   --strategy.type=dagger \
+#   --strategy.num_episodes=10 \
+#   --policy.path=outputs/train/bae/act_single_default/checkpoints/last/pretrained_model \
+#   --robot.type=so101_follower \
+#   --robot.port=/dev/ttyACM0 \
+#   --teleop.type=so101_leader \
+#   --teleop.port=/dev/ttyACM1 \
+#   --dataset.repo_id=local/dagger_corrected_data \
+#   --dataset.single_task="Pick a yellow candy"
