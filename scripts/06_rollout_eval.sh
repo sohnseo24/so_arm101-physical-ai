@@ -40,3 +40,15 @@ lerobot-rollout \
 #   --task="Pick a yellow candy" \
 #   --duration=0 \
 #   --display_data=true
+
+
+#변경사항
+
+
+#--strategy.type=base 옵션 추가
+
+#체크포인트 불러오기 경로 최신화 (checkpoints/last/pretrained_model)
+
+#카메라 키 이름 및 무한 실행(duration=0) 설정 반영
+
+#SmolVLA 자연어 지시어 기반 롤아웃 명령어 주석 추가

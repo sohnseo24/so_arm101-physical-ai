@@ -4,8 +4,8 @@
 # GPU(CUDA)를 활용하여 수집된 데이터셋 기반 정책(Policy) 모델 학습 진행
 # ------------------------------------------------------------------------------
 
-conda activate lerobot
-cd ~/Desktop/sscc/lerobot
+conda activate lerobot 2>/dev/null || true
+cd ~/Desktop/sscc/lerobot 
 
 # ------------------------------------------------------------------------------
 # [옵션 A] ACT (Action Chunking with Transformers) 모델 학습
@@ -19,8 +19,8 @@ lerobot-train \
   --policy.device=cuda \                                 # GPU 가속 사용
   --batch_size=8 \                                       # 배치 크기 설정 (8)
   --steps=50000 \                                        # 총 학습 스텝 수 (50,000)
-  --output_dir=outputs/train/act_candy_data \          # 학습 결과물(체크포인트) 저장 경로
-  --policy.repo_id=local/act_candy_policy \             # 생성될 정책 모델 저장소 이름
+  --output_dir=outputs/train/bae/act_single_default\     # 학습 결과물(체크포인트) 저장 경로
+  --policy.repo_id=local/act_candy_policy_single_default \  # 생성될 정책 모델 저장소 이름
   --dataset.video_backend=pyav                           # 비디오 로딩 백엔드 설정
   --policy.chunk_size=30 \                              #미래에 수행할 30프레임 분량의 행동을 한 번에 묶어서 예측
   --policy.n_action_steps=30 \                          #예측된 30프레임 행동을 실제로 로봇팔이 연속 실행 (chunk_size와 동일하게 설정)
